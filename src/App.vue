@@ -1,26 +1,37 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div id="app">
+    <column1/>
+    <column2/>
+    <column3/>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import column1 from './components/column1'
+import column2 from './components/column2'
+import column3 from './components/column3'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    column1, column2, column3
   }
 }
 </script>
 
 <style>
+html, body, #app {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  display: flex;
+}
+.column {
+  border: 1px solid lightgray;
+  overflow: hidden auto;
+  min-width: 33%;
 }
 </style>
