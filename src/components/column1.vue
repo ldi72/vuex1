@@ -26,51 +26,52 @@
 </template>
 
 <script>
-import { computed } from 'vue'
 import store from '../store'
 
 export default {
   name: 'column1',
   store,
 
-  setup () {
-    let stateDirect = {
-      sortedField: '',
-      sortedDirect: '',
-      ChangeSelect: 0
+  data () {
+    return {
+      stateDirect: {
+        sortedField: '',
+        sortedDirect: '',
+        ChangeSelect: 0
+      },
+      options: [
+        { field: 'id', direct: 'forward', text: 'СортВперед по id', idx: 0 },
+        { field: 'id', direct: 'backward', text: 'СортНазад по id', idx: 1 },
+        { field: 'amount', direct: 'forward', text: 'СортВперед по amount', idx: 2 },
+        { field: 'amount', direct: 'backward', text: 'СортНазад по amount ', idx: 3 }
+      ]
     }
-    const options = [
-      { field: 'id', direct: 'forward', text: 'СортВперед по id', idx: 0 },
-      { field: 'id', direct: 'backward', text: 'СортНазад по id', idx: 1 },
-      { field: 'amount', direct: 'forward', text: 'СортВперед по amount', idx: 2 },
-      { field: 'amount', direct: 'backward', text: 'СортНазад по amount ', idx: 3 }
-    ]
-    const pickedChild = computed({
-      get: () => store.state.checkedItems,
-      set: pickedChild => store.commit('SetCheckedItems', pickedChild)
-    })
-    const onClick = (sortedDirect) => {
-      stateDirect.sortedDirect = sortedDirect
-      stateDirect = directServ(stateDirect, options)
-      store.commit('SetDirect', stateDirect)
-    }
-    const ChangeSelect = computed({
+  },
+  computed: {
+    ChangeSelect: {
       get: () => store.state.ChangeSelect,
       set (ChangeSelect) {
-        stateDirect.ChangeSelect = ChangeSelect
-        stateDirect.sortedField = options[ChangeSelect].field
-        stateDirect.sortedDirect = options[ChangeSelect].direct
-        store.commit('SetDirect', stateDirect)
+        this.stateDirect.ChangeSelect = ChangeSelect
+        this.stateDirect.sortedField = this.options[ChangeSelect].field
+        this.stateDirect.sortedDirect = this.options[ChangeSelect].direct
+        store.commit('SetDirect', this.stateDirect)
       }
-    })
-    return {
-      pickedChild,
-      options,
-      onClick,
-      ChangeSelect
+    },
+    pickedChild: {
+      get: () => store.state.checkedItems,
+      set: pickedChild => store.commit('SetCheckedItems', pickedChild)
+    }
+
+  },
+  methods: {
+    onClick (sortedDirect) {
+      this.stateDirect.sortedDirect = sortedDirect
+      this.stateDirect = directServ(this.stateDirect, this.options)
+      store.commit('SetDirect', this.stateDirect)
     }
   }
 }
+
 const directServ = (state, options) => {
   if (state.sortedDirect === 'forward') {
     if (options.length - 1 === state.ChangeSelect) state.ChangeSelect = 0

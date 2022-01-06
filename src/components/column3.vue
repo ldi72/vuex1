@@ -8,16 +8,15 @@
 </template>
 
 <script>
-import { computed } from 'vue'
 import store from '../store'
 
 export default {
   name: 'column3',
   store,
 
-  setup () {
-    const selectedAmounts = computed(() => store.getters.selectedAmounts)
-    return { selectedAmounts }
+  computed: {
+    selectedAmounts: () =>
+      store.getters.selectedAmounts
   }
 }
 </script>
