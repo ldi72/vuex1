@@ -4,6 +4,7 @@ const sortBy = (key) => (a, b) => a[key] - b[key]
 
 export default createStore({
   state: {
+    User: [],
     rndData: [],
     selectedAmounts: [],
     checkedItems: 1,
@@ -35,6 +36,9 @@ export default createStore({
     }
   },
   mutations: {
+    SetUser (state, User) {
+      state.User = User
+    },
     AddRndData (state, data) {
       state.rndData.push(data)
     },
