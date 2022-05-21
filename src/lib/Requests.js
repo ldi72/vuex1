@@ -161,26 +161,18 @@ export async function GetContent1 (user, key) {
     })
   }
 
-    export async function request(user, cmd) {
+    export async function request(url, metod, data, key) {
         return new Promise( (resolve, reject) => {
               const xmlhttp = new XMLHttpRequest()
-                //xmlhttp.open('POST', 'http://lkservice.ru:17224/finewebservice.asmx', true);
-                xmlhttp.open('POST', 'http://lkservice.ru:17225/finewebservice.asmx', true) // TEST
+                xmlhttp.open(metod, host + url, true) 
                
-                xmlhttp.setRequestHeader('soapaction', 'http://tempuri.org/Request');
-                xmlhttp.setRequestHeader('Content-Type', 'text/xml; charset=utf-8');
-    
-                // build SOAP request
-                const sr = '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/"><s:Body><Request xmlns="http://tempuri.org/" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">'+
-                '<N>'+ user +'</N>'+
-                '<InXML>'+ cmd +'</InXML>'+
-                '</Request></s:Body></s:Envelope>'
-    
+                xmlhttp.setRequestHeader('key', key);
+                xmlhttp.setRequestHeader('Content-Type', 'application/json');
+        
                 xmlhttp.onload = function() {
                   //alert(`Загружено: ${xmlhttp.status} ${xmlhttp.response}`);
                   if (this.status >= 200 && this.status < 300) {
-                      const response = xmlhttp.response.getElementsByTagName('RequestResult')[0].textContent.replace(/&quot;/g,"'")
-                      resolve(response);
+                      resolve(xmlhttp.response);
                   } else {                  
                       reject({
                         status: this.status,
@@ -196,8 +188,8 @@ export async function GetContent1 (user, key) {
                     statusText: 'onerror err ' + xmlhttp.statusText,
                   })            
                 }
-                xmlhttp.responseType = 'document'
-                xmlhttp.send(sr)
+                xmlhttp.responseType = 'json'
+                xmlhttp.send(data)
       })
     }
     

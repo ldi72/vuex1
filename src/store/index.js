@@ -1,66 +1,60 @@
 import { createStore } from 'vuex'
 
-const sortBy = (key) => (a, b) => a[key] - b[key]
+// const sortBy = (key) => (a, b) => a[key] - b[key]
 
 export default createStore({
   state: {
     User: [],
-    rndData: [],
-    selectedAmounts: [],
-    checkedItems: 1,
-    ChangeSelect: 0,
-    sortedDirect: 'forward',
-    sortedField: 'id'
+    AddUser: [],
+    Lists: [],
+    Selected: [],
+    DisCompany: true,
+    DisBranch: true,
+
+    UserRules: [
+      { text: 'Администратор организации', Rule: 0 },
+      { text: 'Администратор филиала', Rule: 1 },
+      { text: 'Эксперт', Rule: 2 },
+      { text: 'Оператор', Rule: 3 }
+    ]
   },
   getters: {
-    rndData: state => {
-      return state.rndData
+    User: state => {
+      return state.User
     },
-
-    selectedAmounts: state => {
-      return state.selectedAmounts
+    Lists: state => {
+      return state.Lists
     },
-
-    SortedFilteredData: (state, getters) => {
-      const FilteredData = getters.FilteredData(state.checkedItems)
-      // const sortBy = (key) => (a, b) => a[key] - b[key]
-      FilteredData.sort(sortBy(state.sortedField))
-      if (state.sortedDirect === 'backward') FilteredData.reverse()
-      return FilteredData
-    },
-
-    FilteredData: (_, getters) => (checkedItems) => {
-      if (checkedItems === '2') return getters.rndData.filter(function (item) { return item.amount < 0 })
-      else if (checkedItems === '3') return getters.rndData.filter(function (item) { return item.amount >= 0 })
-      return getters.rndData
+    Selected: state => {
+      return state.Selected
     }
   },
   mutations: {
     SetUser (state, User) {
       state.User = User
     },
-    AddRndData (state, data) {
-      state.rndData.push(data)
+    SetAddUser (state, AddUser) {
+      const key = Object.keys(AddUser)
+      if (key[0] === 'AddUser') {
+        state.AddUser = {}
+        state.Selected.selectedUser = {}
+      } else state.AddUser[key] = AddUser[key]
     },
-    UpdSelectedAmounts (state, data) {
-      state.selectedAmounts = data
+    SetLists (state, Lists) {
+      state.Lists = Lists
     },
-    SetRndData (state, item) {
-      state.rndData.splice(item.id - 1, 1, item)
+    SetSelected (state, Selected) {
+      state.Selected[Object.keys(Selected)] = Selected[Object.keys(Selected)]
     },
-    SetCheckedItems (state, item) {
-      state.checkedItems = item
+    SetDisCompany (state, DisCompany) {
+      state.DisCompany = DisCompany
     },
-    SetDirect (state, Direct) {
-      state.ChangeSelect = Direct.ChangeSelect
-      state.sortedDirect = Direct.sortedDirect
-      state.sortedField = Direct.sortedField
+    SetDisBranch (state, DisBranch) {
+      state.DisBranch = DisBranch
     }
+
   },
   actions: {
-    AddRndData (stateAdd, data) {
-      stateAdd.commit('AddRndData', data)
-    }
   },
   modules: {
   }

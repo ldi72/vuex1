@@ -64,13 +64,28 @@ export default {
       try {
         const decrypt = LA.decrypt(answer.Value, key)
         answer = JSON.parse(decrypt)
-        answer.key = key
+        answer.key = LA.encrypt(this.inpLogin, key)
         store.commit('SetUser', answer)
       } catch {
         alert('Не верный логин или пароль')
         return
       }
-      // console.log(store.state.User.UserID)
+
+      try {
+        answer = await LA.GetContent('/users/lists/' + answer.UserID, answer.key)
+      } catch (error) {
+        alert(error.statusText)
+        return
+      }
+      store.commit('SetLists', answer.result[0])
+      store.commit('SetSelected', { selectedCompany: store.state.Lists.Companies.find(function (item) { return item.CompanyID === 1 }) })
+      store.commit('SetSelected', {
+        selectedBranch: store.state.Selected.selectedCompany.Branches
+          .find(function (item) { return item.BranchID === store.state.User.BranchID })
+      })
+
+      if (store.state.User.UserRule < 0) store.commit('SetDisCompany', false)
+      if (store.state.User.UserRule < 1) store.commit('SetDisBranch', false)
 
       const elements = document.getElementsByClassName('LoginPage')
       while (elements.length > 0) {
@@ -115,16 +130,10 @@ html, body, #app {
   width: 100%;
 }
 
-.col {
+.colUser, .colBranch, .colCompany {
   border: 1px solid lightgray;
   overflow: hidden auto;
   min-width: 33%;
 }
 
-.column {
-  display: none;
-  border: 1px solid lightgray;
-  overflow: hidden auto;
-  min-width: 33%;
-}
 </style>
