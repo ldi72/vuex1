@@ -5,11 +5,12 @@
       <div class="boxInput">
         <select :disabled="disCompany" v-model="selectedCompany">
         <option v-for="item in Companies" :value="item" v-bind:key="item.CompanyID">
-          {{ item.Name }}
+          {{ item.CompanyName }}
         </option>
         </select>
       </div>
     </div>
+    <br>
 
   </div>
 </template>

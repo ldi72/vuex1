@@ -169,14 +169,15 @@ export async function GetContent1 (user, key) {
                 xmlhttp.setRequestHeader('key', key);
                 xmlhttp.setRequestHeader('Content-Type', 'application/json');
         
-                xmlhttp.onload = function() {
+                xmlhttp.onload = function(error) {
                   //alert(`Загружено: ${xmlhttp.status} ${xmlhttp.response}`);
                   if (this.status >= 200 && this.status < 300) {
                       resolve(xmlhttp.response);
                   } else {                  
+                      //console.log(xmlhttp)
                       reject({
                         status: this.status,
-                        statusText: 'onload err ' + xmlhttp.statusText,
+                        statusText: 'onload err ' + xmlhttp.response.sqlMessage,
                     })
                   }            
                 }

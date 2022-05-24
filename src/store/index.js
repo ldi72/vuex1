@@ -6,6 +6,7 @@ export default createStore({
   state: {
     User: [],
     AddUser: [],
+    AddBranch: [],
     Lists: [],
     Selected: [],
     DisCompany: true,
@@ -15,7 +16,8 @@ export default createStore({
       { text: 'Администратор организации', Rule: 0 },
       { text: 'Администратор филиала', Rule: 1 },
       { text: 'Эксперт', Rule: 2 },
-      { text: 'Оператор', Rule: 3 }
+      { text: 'Оператор', Rule: 3 },
+      { text: 'Бухгалтер', Rule: 4 }
     ]
   },
   getters: {
@@ -39,6 +41,19 @@ export default createStore({
         state.AddUser = {}
         state.Selected.selectedUser = {}
       } else state.AddUser[key] = AddUser[key]
+    },
+    SetAddAllInBranch (state, AddBranch) {
+      const key = Object.keys(AddBranch)
+      state.AddBranch = AddBranch[key]
+    },
+    SetAddBranch (state, AddBranch) {
+      const key = Object.keys(AddBranch)
+      if (key[0] === 'AddBranch') {
+        state.AddBranch = {}
+        state.AddUser = {}
+        state.Selected.selectedBranch = {}
+        state.Selected.selectedUser = {}
+      } else state.AddBranch[key] = AddBranch[key]
     },
     SetLists (state, Lists) {
       state.Lists = Lists

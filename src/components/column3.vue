@@ -8,10 +8,11 @@
           {{ item.Name }}
         </option>
         </select>
-        <button @click="AddUserClick">ДОБАВИТЬ</button>
+        <button v-show="showAddUserButton" @click="AddUserClick">ДОБАВИТЬ</button>
         <button @click="SaveUserClick">СОХРАНИТЬ</button>
       </div>
     </div>
+    <br>
     <div class="inputRow">
       <div class="nameInput">ФИО</div>
       <div class="boxInput">
@@ -56,6 +57,11 @@ export default {
     }
   },
   computed: {
+    showAddUserButton: () => {
+      try {
+        return (store.state.Selected.selectedUser.UserID !== undefined)
+      } catch { return false }
+    },
     Users: () => {
       try {
         return store.state.Selected.selectedBranch.Users.filter(item => item.UserRule >= store.state.User.UserRule)
@@ -154,9 +160,9 @@ export default {
         return
       }
       store.commit('SetAddUser', { DataInfo: {} })
+      store.commit('SetAddUser', { StatFlag: 0 })
 
       const arrayToString = JSON.stringify(Object.assign({}, store.state.AddUser))
-      console.log(arrayToString)
       let ans
       try {
         ans = await LA.request('/users/' + store.state.User.UserID, 'POST', arrayToString, store.state.User.key)
@@ -187,6 +193,7 @@ export default {
         selectedUser: store.state.Selected.selectedBranch.Users
           .find(function (item) { return item.UserID === UserID })
       })
+      alert('УСПЕШНО! Запись сохранена.')
     }
   }
 }
