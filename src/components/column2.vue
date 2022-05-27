@@ -173,20 +173,25 @@ export default {
       }
 
       const DataInfo = store.state.AddBranch.DataInfo
-      if (!DataInfo.Lt || isNaN(DataInfo.Lt)) {
-        alert('Проверьте Широту.')
-        return
-      }
-      if (!DataInfo.Lg || isNaN(DataInfo.Lg)) {
-        alert('Проверьте Долготу.')
-        return
-      }
-      if (!DataInfo.Distance || isNaN(DataInfo.Distance)) {
-        alert('Проверьте Дистанцию.')
-        return
-      }
-      if (!DataInfo.TZ || isNaN(DataInfo.TZ)) {
-        alert('Проверьте Тайм зону.')
+      try {
+        if (!DataInfo.Lt || isNaN(DataInfo.Lt)) {
+          alert('Проверьте Широту.')
+          return
+        }
+        if (!DataInfo.Lg || isNaN(DataInfo.Lg)) {
+          alert('Проверьте Долготу.')
+          return
+        }
+        if (!DataInfo.Distance || isNaN(DataInfo.Distance)) {
+          alert('Проверьте Дистанцию.')
+          return
+        }
+        if (!DataInfo.TZ || isNaN(DataInfo.TZ)) {
+          alert('Проверьте Тайм зону.')
+          return
+        }
+      } catch {
+        alert('Заполните все поля.')
         return
       }
       DataInfo.Lt = parseFloat(DataInfo.Lt)
