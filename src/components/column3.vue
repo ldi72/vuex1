@@ -41,6 +41,12 @@
         </select>
       </div>
     </div>
+    <div class="inputRow">
+      <div class="nameInput">Доверенность</div>
+      <div class="boxInput">
+        <input v-model="inputDocProxy" type="text" maxlength="20">
+      </div>
+    </div>
 
   </div>
 </template>
@@ -122,6 +128,20 @@ export default {
       set (selectedRule) {
         store.commit('SetAddUser', { UserRule: selectedRule })
       }
+    },
+    inputDocProxy: {
+      get () {
+        let text
+        try { text = store.state.Selected.selectedUser.DataInfo.DocProxy } catch { return undefined }
+        store.commit('SetAddUser', { DataInfo: store.getters.Selected.selectedUser.DataInfo })
+        return text
+      },
+      set (inputDocProxy) {
+        let DataInfo = store.state.AddUser.DataInfo
+        if (DataInfo === undefined) DataInfo = {}
+        DataInfo.DocProxy = inputDocProxy.trim()
+        store.commit('SetAddUser', { DataInfo: DataInfo })
+      }
     }
 
   },
@@ -159,7 +179,14 @@ export default {
         alert('Введите Роль пользователя в системе.')
         return
       }
-      store.commit('SetAddUser', { DataInfo: {} })
+      let DataInfo = store.state.AddUser.DataInfo
+      if (DataInfo === undefined) DataInfo = {}
+
+      if (!DataInfo.DocProxy && (store.state.AddUser.UserRule === 1 || store.state.AddUser.UserRule === 2)) {
+        alert('Введите доверенность.')
+        return
+      }
+      store.commit('SetAddUser', { DataInfo: DataInfo })
       store.commit('SetAddUser', { StatFlag: 0 })
 
       const arrayToString = JSON.stringify(Object.assign({}, store.state.AddUser))

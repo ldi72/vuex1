@@ -102,7 +102,8 @@ export default {
         return text
       },
       set (inputLt) {
-        const DataInfo = store.state.AddBranch.DataInfo
+        let DataInfo = store.state.AddBranch.DataInfo
+        if (DataInfo === undefined) DataInfo = {}
         DataInfo.Lt = inputLt.trim()
         store.commit('SetAddBranch', { DataInfo: DataInfo })
       }
@@ -115,7 +116,8 @@ export default {
         return text
       },
       set (inputLg) {
-        const DataInfo = store.state.AddBranch.DataInfo
+        let DataInfo = store.state.AddBranch.DataInfo
+        if (DataInfo === undefined) DataInfo = {}
         DataInfo.Lg = inputLg.trim()
         store.commit('SetAddBranch', { DataInfo: DataInfo })
       }
@@ -128,7 +130,8 @@ export default {
         return text
       },
       set (inputDistance) {
-        const DataInfo = store.state.AddBranch.DataInfo
+        let DataInfo = store.state.AddBranch.DataInfo
+        if (DataInfo === undefined) DataInfo = {}
         DataInfo.Distance = inputDistance.trim()
         store.commit('SetAddBranch', { DataInfo: DataInfo })
       }
@@ -141,7 +144,8 @@ export default {
         return text
       },
       set (inputTZ) {
-        const DataInfo = store.state.AddBranch.DataInfo
+        let DataInfo = store.state.AddBranch.DataInfo
+        if (DataInfo === undefined) DataInfo = {}
         DataInfo.TZ = inputTZ.trim()
         store.commit('SetAddBranch', { DataInfo: DataInfo })
       }
@@ -158,7 +162,6 @@ export default {
         alert('Для какой организации создается филиал?')
         return
       }
-      console.log(CompanyID)
       store.commit('SetAddBranch', { CompanyID: CompanyID })
 
       try {
@@ -172,28 +175,26 @@ export default {
         return
       }
 
-      const DataInfo = store.state.AddBranch.DataInfo
-      try {
-        if (!DataInfo.Lt || isNaN(DataInfo.Lt)) {
-          alert('Проверьте Широту.')
-          return
-        }
-        if (!DataInfo.Lg || isNaN(DataInfo.Lg)) {
-          alert('Проверьте Долготу.')
-          return
-        }
-        if (!DataInfo.Distance || isNaN(DataInfo.Distance)) {
-          alert('Проверьте Дистанцию.')
-          return
-        }
-        if (!DataInfo.TZ || isNaN(DataInfo.TZ)) {
-          alert('Проверьте Тайм зону.')
-          return
-        }
-      } catch {
-        alert('Заполните все поля.')
+      let DataInfo = store.state.AddBranch.DataInfo
+      if (DataInfo === undefined) DataInfo = {}
+
+      if (!DataInfo.Lt || isNaN(DataInfo.Lt)) {
+        alert('Проверьте Широту.')
         return
       }
+      if (!DataInfo.Lg || isNaN(DataInfo.Lg)) {
+        alert('Проверьте Долготу.')
+        return
+      }
+      if (!DataInfo.Distance || isNaN(DataInfo.Distance)) {
+        alert('Проверьте Дистанцию.')
+        return
+      }
+      if (!DataInfo.TZ || isNaN(DataInfo.TZ)) {
+        alert('Проверьте Тайм зону.')
+        return
+      }
+
       DataInfo.Lt = parseFloat(DataInfo.Lt)
       DataInfo.Lg = parseFloat(DataInfo.Lg)
       DataInfo.TZ = parseInt(DataInfo.TZ)
