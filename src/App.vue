@@ -133,7 +133,14 @@ html, body, #app {
 .colUser, .colBranch, .colCompany {
   border: 1px solid lightgray;
   overflow: hidden auto;
-  min-width: 33%;
+}
+
+.colUser, .colBranch {
+  min-width: 40%;
+}
+
+.colCompany {
+  min-width: 20%;
 }
 
 </style>

@@ -10,6 +10,7 @@
         </select>
         <button v-show="showAddBranchButton" :disabled="disBranch" @click="AddBranchClick">ДОБАВИТЬ</button>
         <button :disabled="disBranch" @click="SaveBranchClick">СОХРАНИТЬ</button>
+        <button v-show="showAddBranchButton" :disabled="disBranch" @click="DeleteBranchClick">УДАЛИТЬ</button>
       </div>
     </div>
     <br>
@@ -155,6 +156,39 @@ export default {
   methods: {
     AddBranchClick () {
       store.commit('SetAddBranch', { AddBranch: {} })
+    },
+    async DeleteBranchClick () {
+      if (confirm('Вы хотите удалить филиал?')) {
+        const setFlag = {}
+        setFlag.BranchID = store.state.Selected.selectedBranch.BranchID
+        setFlag.StatFlag = 1
+        const arrayToString = JSON.stringify(Object.assign({}, setFlag))
+        let ans
+        try {
+          ans = await LA.request('/users/branchflag/' + store.state.User.UserID, 'PUT', arrayToString, store.state.User.key)
+        } catch (error) {
+          alert(error.statusText)
+          return
+        }
+        if (ans.Value === 0) {
+          alert('ВНИМАНИЕ! Запись не удалилась.')
+          return
+        }
+
+        let res
+        try {
+          res = await LA.GetContent('/users/lists/' + store.state.User.UserID, store.state.User.key)
+        } catch (error) {
+          alert(error.statusText)
+          return
+        }
+        store.commit('SetLists', res.result[0])
+        store.commit('SetSelected', { selectedCompany: store.state.Lists.Companies.find(function (item) { return item.CompanyID === 1 }) })
+        store.commit('SetAddBranch', { AddBranch: {} })
+        alert('УСПЕШНО! Запись удалена.')
+      } else {
+        // Do nothing!
+      }
     },
     async SaveBranchClick () {
       let BranchID, CompanyID
